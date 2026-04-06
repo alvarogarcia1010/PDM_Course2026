@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.agarcia.pdm_course_2026.clase_230326.ExerciseOne
+import com.agarcia.pdm_course_2026.clase_250326.LemonadeApp
 import com.agarcia.pdm_course_2026.ui.theme.PDM_Course_2026Theme
 
 class MainActivity : ComponentActivity() {
@@ -21,7 +22,7 @@ class MainActivity : ComponentActivity() {
     setContent {
       PDM_Course_2026Theme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-          ExerciseOne(
+          LemonadeApp(
             modifier = Modifier.padding(innerPadding),
             )
         }
