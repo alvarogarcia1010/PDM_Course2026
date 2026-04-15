@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.agarcia.pdm_course_2026.clase080426.TipCalculator
+import com.agarcia.pdm_course_2026.clase130426.MyFirstScreen
 import com.agarcia.pdm_course_2026.clase_230326.ExerciseOne
 import com.agarcia.pdm_course_2026.clase_250326.LemonadeApp
 import com.agarcia.pdm_course_2026.ui.theme.PDM_Course_2026Theme
@@ -26,11 +27,7 @@ class MainActivity : ComponentActivity() {
     enableEdgeToEdge()
     setContent {
       PDM_Course_2026Theme {
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-          TipCalculator(
-            modifier = Modifier.padding(innerPadding),
-            )
-        }
+        MyFirstScreen()
       }
     }
   }
