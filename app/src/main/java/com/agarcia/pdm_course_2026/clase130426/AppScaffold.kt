@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 fun AppScaffold(
     modifier: Modifier = Modifier,
     title: String = "",
+    navigationIcon: @Composable (() -> Unit)? = null,
     bottomBarText: String? = null,
     onFabClick: (() -> Unit)? = null,
     fabIcon: @Composable (() -> Unit)? = null,
@@ -43,7 +44,8 @@ fun AppScaffold(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         titleContentColor = MaterialTheme.colorScheme.primary,
                     ),
-                    title = { Text(title) }
+                    title = { Text(title) },
+                    navigationIcon = { navigationIcon?.invoke() }
                 )
             }
         },
