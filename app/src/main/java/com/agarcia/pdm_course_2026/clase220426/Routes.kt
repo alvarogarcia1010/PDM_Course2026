@@ -7,10 +7,6 @@ sealed class Routes : NavKey {
   @Serializable
   data object Home : Routes()
 
-  @Serializable
-  data class MyProfile(
-    val id: String
-  ) : Routes()
 
   @Serializable
   data class MovieDetail(val movieId: Int) : Routes()

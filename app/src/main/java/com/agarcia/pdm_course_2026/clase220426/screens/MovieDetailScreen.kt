@@ -25,73 +25,73 @@ import com.agarcia.pdm_course_2026.clase220426.dummy.dummyMovies
 
 @Composable
 fun MovieDetailScreen(
-    movieId: Int,
-    navigateBack: () -> Unit
+  movieId: Int,
+  navigateBack: () -> Unit
 ) {
-    val movie = dummyMovies.find { it.id == movieId }
+  val movie = dummyMovies.find { it.id == movieId }
 
-    AppScaffold(
-        title = movie?.title ?: "Detail",
-        navigationIcon = {
-            IconButton(onClick = navigateBack) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back"
-                )
-            }
-        }
-    ) { padding ->
-        movie?.let {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                AsyncImage(
-                    model = it.backdropUrl,
-                    contentDescription = it.title,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(220.dp),
-                    contentScale = ContentScale.Crop
-                )
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = it.title,
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = it.originalTitle,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "Rating: ${"%.2f".format(it.voteAverage)}  -  ${it.releaseDate}",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "Popularidad: ${"%.1f".format(it.popularity)}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "Sinopsis",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = it.overview,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-            }
-        }
+  AppScaffold(
+    title = movie?.title ?: "Detail",
+    navigationIcon = {
+      IconButton(onClick = navigateBack) {
+        Icon(
+          imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+          contentDescription = "Back"
+        )
+      }
     }
+  ) { padding ->
+    movie?.let {
+      Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)
+            .verticalScroll(rememberScrollState())
+      ) {
+        AsyncImage(
+          model = it.backdropUrl,
+          contentDescription = it.title,
+          modifier = Modifier
+              .fillMaxWidth()
+              .height(220.dp),
+          contentScale = ContentScale.Crop
+        )
+        Column(modifier = Modifier.padding(16.dp)) {
+          Text(
+            text = it.title,
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold
+          )
+          Spacer(modifier = Modifier.height(4.dp))
+          Text(
+            text = it.originalTitle,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+          )
+          Spacer(modifier = Modifier.height(8.dp))
+          Text(
+            text = "Rating: ${"%.2f".format(it.voteAverage)}  -  ${it.releaseDate}",
+            style = MaterialTheme.typography.bodyMedium
+          )
+          Spacer(modifier = Modifier.height(8.dp))
+          Text(
+            text = "Popularidad: ${"%.1f".format(it.popularity)}",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+          )
+          Spacer(modifier = Modifier.height(16.dp))
+          Text(
+            text = "Sinopsis",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold
+          )
+          Spacer(modifier = Modifier.height(4.dp))
+          Text(
+            text = it.overview,
+            style = MaterialTheme.typography.bodyMedium
+          )
+        }
+      }
+    }
+  }
 }
