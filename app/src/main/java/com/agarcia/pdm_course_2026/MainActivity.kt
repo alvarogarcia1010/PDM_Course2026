@@ -9,7 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.agarcia.pdm_course_2026.clase270426.OrderUpApp
+import com.agarcia.pdm_course_2026.clase040526.MovieAppWithMVVM
 import com.agarcia.pdm_course_2026.ui.theme.PDM_Course_2026Theme
 
 private const val TAG = "MainActivity"
@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
     enableEdgeToEdge()
     setContent {
       PDM_Course_2026Theme {
-        OrderUpApp()
+        MovieAppWithMVVM()
       }
     }
   }
