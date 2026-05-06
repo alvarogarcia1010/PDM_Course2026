@@ -1,6 +1,8 @@
-package com.agarcia.pdm_course_2026.clase040526.screens
+package com.agarcia.pdm_course_2026.clase040526.screens.MovieDetailScreen
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,25 +12,54 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.agarcia.pdm_course_2026.clase130426.AppScaffold
-import com.agarcia.pdm_course_2026.clase220426.dummy.dummyMovies
 
 @Composable
 fun MovieDetailScreen(
   movieId: Int,
-  navigateBack: () -> Unit
+  navigateBack: () -> Unit,
+  viewModel: MovieDetailViewModel = viewModel()
 ) {
-  val movie = dummyMovies.find { it.id == movieId }
+  val movie by viewModel.movie.collectAsState()
+  val isLoading by viewModel.isLoading.collectAsState()
+
+  LaunchedEffect(movieId) {
+    viewModel.loadMovieById(movieId)
+  }
+
+  if (isLoading) {
+    AppScaffold(title = "Detail") { padding ->
+      Row(
+        modifier = Modifier
+          .padding(padding)
+          .fillMaxSize(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        CircularProgressIndicator()
+        Text(
+          text = "Loading movie...",
+        )
+      }
+    }
+    return
+  }
 
   AppScaffold(
     title = movie?.title ?: "Detail",

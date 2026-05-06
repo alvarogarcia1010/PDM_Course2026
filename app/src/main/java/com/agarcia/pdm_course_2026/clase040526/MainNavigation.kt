@@ -8,7 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
-import com.agarcia.pdm_course_2026.clase040526.screens.MovieDetailScreenV2
+import com.agarcia.pdm_course_2026.clase040526.screens.MovieDetailScreen.MovieDetailScreen
+import com.agarcia.pdm_course_2026.clase040526.screens.MovieDetailScreen.MovieDetailScreenV2
 import com.agarcia.pdm_course_2026.clase040526.screens.MovieList.MovieListScreen
 
 @Composable
@@ -27,7 +28,7 @@ fun MovieAppWithMVVM() {
         )
       }
       entry<Routes.MovieDetail> { key ->
-        MovieDetailScreenV2(
+        MovieDetailScreen(
           movieId = key.movieId,
           navigateBack = {
             backStack.removeLastOrNull()
