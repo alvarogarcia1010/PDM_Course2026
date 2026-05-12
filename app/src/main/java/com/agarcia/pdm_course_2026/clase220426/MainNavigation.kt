@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
-import com.agarcia.pdm_course_2026.clase220426.screens.MovieDetailScreenV2
+import com.agarcia.pdm_course_2026.clase220426.screens.MovieDetail.MovieDetailScreenV2
 import com.agarcia.pdm_course_2026.clase220426.screens.MovieList.MovieListScreen
 
 @Composable

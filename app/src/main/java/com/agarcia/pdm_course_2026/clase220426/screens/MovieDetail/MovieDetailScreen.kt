@@ -1,4 +1,4 @@
-package com.agarcia.pdm_course_2026.clase220426.screens
+package com.agarcia.pdm_course_2026.clase220426.screens.MovieDetail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -44,16 +44,16 @@ fun MovieDetailScreen(
     movie?.let {
       Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(padding)
-            .verticalScroll(rememberScrollState())
+          .fillMaxSize()
+          .padding(padding)
+          .verticalScroll(rememberScrollState())
       ) {
         AsyncImage(
           model = it.backdropUrl,
           contentDescription = it.title,
           modifier = Modifier
-              .fillMaxWidth()
-              .height(220.dp),
+            .fillMaxWidth()
+            .height(220.dp),
           contentScale = ContentScale.Crop
         )
         Column(modifier = Modifier.padding(16.dp)) {
