@@ -81,6 +81,7 @@ fun MovieDetailScreenV2(
 ) {
   val movie by viewModel.movie.collectAsState()
   val loading by viewModel.loading.collectAsState()
+  val error by viewModel.error.collectAsState()
 
   val snackbarHostState = remember { SnackbarHostState() }
   val scope = rememberCoroutineScope()
@@ -92,6 +93,16 @@ fun MovieDetailScreenV2(
   if (loading) {
     AppScaffold(title = "Movies") { padding ->
       CircularProgressIndicator(modifier = Modifier.padding(padding))
+    }
+    return
+  }
+
+  if (error != null) {
+    AppScaffold(title = "Movies") { padding ->
+      Text(
+        text = error ?: "Unknown error",
+        modifier = Modifier.padding(padding)
+      )
     }
     return
   }
@@ -122,9 +133,9 @@ fun MovieDetailScreenV2(
     movie?.let {
       Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(padding)
-            .verticalScroll(rememberScrollState())
+          .fillMaxSize()
+          .padding(padding)
+          .verticalScroll(rememberScrollState())
       ) {
         HeroHeader(movie = it)
         Spacer(modifier = Modifier.height(16.dp))
@@ -150,29 +161,29 @@ private fun HeroHeader(movie: Movie) {
       model = movie.backdropUrl,
       contentDescription = movie.title,
       modifier = Modifier
-          .fillMaxWidth()
-          .height(260.dp),
+        .fillMaxWidth()
+        .height(260.dp),
       contentScale = ContentScale.Crop
     )
     Box(
       modifier = Modifier
-          .fillMaxWidth()
-          .height(260.dp)
-          .background(
-              Brush.verticalGradient(
-                  colorStops = arrayOf(
-                      0.0f to Color.Black.copy(alpha = 0.35f),
-                      0.35f to Color.Transparent,
-                      1.0f to Color.Black.copy(alpha = 0.9f)
-                  )
-              )
+        .fillMaxWidth()
+        .height(260.dp)
+        .background(
+          Brush.verticalGradient(
+            colorStops = arrayOf(
+              0.0f to Color.Black.copy(alpha = 0.35f),
+              0.35f to Color.Transparent,
+              1.0f to Color.Black.copy(alpha = 0.9f)
+            )
           )
+        )
     )
     Row(
       modifier = Modifier
-          .fillMaxWidth()
-          .align(Alignment.BottomStart)
-          .padding(16.dp),
+        .fillMaxWidth()
+        .align(Alignment.BottomStart)
+        .padding(16.dp),
       verticalAlignment = Alignment.Bottom
     ) {
       ElevatedCard(
@@ -214,9 +225,9 @@ private fun RatingBadge(rating: Double, votes: Int) {
   Row(
     verticalAlignment = Alignment.CenterVertically,
     modifier = Modifier
-        .clip(RoundedCornerShape(50))
-        .background(Color.Black.copy(alpha = 0.55f))
-        .padding(horizontal = 10.dp, vertical = 6.dp)
+      .clip(RoundedCornerShape(50))
+      .background(Color.Black.copy(alpha = 0.55f))
+      .padding(horizontal = 10.dp, vertical = 6.dp)
   ) {
     Icon(
       imageVector = Icons.Filled.Star,
@@ -243,8 +254,8 @@ private fun RatingBadge(rating: Double, votes: Int) {
 private fun StatsRow(movie: Movie) {
   Row(
     modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp),
+      .fillMaxWidth()
+      .padding(horizontal = 16.dp),
     horizontalArrangement = Arrangement.spacedBy(10.dp)
   ) {
     StatTile(
@@ -284,8 +295,8 @@ private fun StatTile(
   ) {
     Column(
       modifier = Modifier
-          .fillMaxWidth()
-          .padding(vertical = 12.dp, horizontal = 8.dp),
+        .fillMaxWidth()
+        .padding(vertical = 12.dp, horizontal = 8.dp),
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
       Icon(
@@ -346,21 +357,21 @@ private fun formatPopularity(value: Double): String = when {
 private fun GenrePill(name: String) {
   Box(
     modifier = Modifier
-        .clip(RoundedCornerShape(50))
-        .background(
-            Brush.horizontalGradient(
-                colors = listOf(
-                    MaterialTheme.colorScheme.primary.copy(alpha = 0.18f),
-                    MaterialTheme.colorScheme.tertiary.copy(alpha = 0.18f)
-                )
-            )
+      .clip(RoundedCornerShape(50))
+      .background(
+        Brush.horizontalGradient(
+          colors = listOf(
+            MaterialTheme.colorScheme.primary.copy(alpha = 0.18f),
+            MaterialTheme.colorScheme.tertiary.copy(alpha = 0.18f)
+          )
         )
-        .border(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f),
-            shape = RoundedCornerShape(50)
-        )
-        .padding(horizontal = 14.dp, vertical = 8.dp)
+      )
+      .border(
+        width = 1.dp,
+        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f),
+        shape = RoundedCornerShape(50)
+      )
+      .padding(horizontal = 14.dp, vertical = 8.dp)
   ) {
     Text(
       text = name,
@@ -376,8 +387,8 @@ private fun GenrePill(name: String) {
 private fun GenresRow(genreIds: List<Int>) {
   FlowRow(
     modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp),
+      .fillMaxWidth()
+      .padding(horizontal = 16.dp),
     horizontalArrangement = Arrangement.spacedBy(8.dp),
     verticalArrangement = Arrangement.spacedBy(8.dp)
   ) {
