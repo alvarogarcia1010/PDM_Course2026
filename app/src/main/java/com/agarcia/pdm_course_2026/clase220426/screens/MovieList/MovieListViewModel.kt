@@ -17,15 +17,51 @@ class MovieListViewModel : ViewModel() {
   private val _loading = MutableStateFlow<Boolean>(false)
   val loading = _loading.asStateFlow()
 
+  private val _refresh = MutableStateFlow<Boolean>(false)
+  val refresh = _refresh.asStateFlow()
+
+  private val _error = MutableStateFlow<String?>(null)
+  val error = _error.asStateFlow()
+
   init {
     loadMovies()
   }
 
   fun loadMovies() {
     viewModelScope.launch {
+      _error.value = null
       _loading.value = true
-      _movies.value = movieRepository.getMovies()
+
+      movieRepository.getMovies()
+        .onSuccess { movies ->
+          _movies.value = movies
+
+        }
+        .onFailure { error ->
+          _error.value =
+            "Hola corazon bello, fijate que hubo error, podes hacerme el favor de presionar el boton recargar"
+        }
+
       _loading.value = false
+    }
+  }
+
+  fun refreshMovies() {
+    viewModelScope.launch {
+      _error.value = null
+      _refresh.value = true
+
+      movieRepository.getMovies()
+        .onSuccess { movies ->
+          _movies.value = movies
+
+        }
+        .onFailure { error ->
+          _error.value =
+            "Hola corazon bello, fijate que hubo error, podes hacerme el favor de presionar el boton recargar"
+        }
+
+      _refresh.value = false
     }
   }
 }

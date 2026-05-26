@@ -5,13 +5,13 @@ import com.agarcia.pdm_course_2026.clase220426.model.Movie
 import kotlinx.coroutines.delay
 
 class MovieDummyRepository : MovieRepository {
-  override suspend fun getMovies(): List<Movie> {
+  override suspend fun getMovies(): Result<List<Movie>> {
     delay(2000)
-    return dummyMovies
+    return Result.success(dummyMovies)
   }
 
-  override suspend fun getMovieById(id: Int): Movie? {
+  override suspend fun getMovieById(id: Int): Result<Movie> {
     delay(5000)
-    return dummyMovies.find { it.id == id }
+    return Result.success(dummyMovies.find { it.id == id }) as Result<Movie>
   }
 }

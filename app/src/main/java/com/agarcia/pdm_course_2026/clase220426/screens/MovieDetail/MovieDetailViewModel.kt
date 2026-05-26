@@ -21,7 +21,10 @@ class MovieDetailViewModel : ViewModel() {
   fun loadMovieById(id: Int) {
     viewModelScope.launch {
       _loading.value = true
-      _movie.value = movieRepository.getMovieById(id)
+      movieRepository.getMovieById(id)
+        .onSuccess { movie ->
+          _movie.value = movie
+        }
       _loading.value = false
     }
   }
