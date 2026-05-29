@@ -25,22 +25,31 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -73,6 +82,74 @@ private val genreNames = mapOf(
   53 to "Suspense",
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CommentBottomSheet(
+  onSave: (title: String, body: String) -> Unit,
+  onDismiss: () -> Unit
+) {
+  val sheetState = rememberModalBottomSheetState()
+  var title by rememberSaveable { mutableStateOf("") }
+  var body by rememberSaveable { mutableStateOf("") }
+
+  val isValid = title.isNotBlank() && body.isNotBlank()
+
+  ModalBottomSheet(
+    sheetState = sheetState,
+    onDismissRequest = onDismiss
+  ) {
+    Column(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp)
+        .padding(bottom = 32.dp),
+      verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+      Text(
+        text = "Deja tu comentario",
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.Bold
+      )
+      OutlinedTextField(
+        value = title,
+        onValueChange = { title = it },
+        label = { Text("Título") },
+        modifier = Modifier.fillMaxWidth(),
+        singleLine = true
+      )
+      OutlinedTextField(
+        value = body,
+        onValueChange = { body = it },
+        label = { Text("Comentario") },
+        modifier = Modifier
+          .fillMaxWidth()
+          .height(140.dp),
+        maxLines = 5
+      )
+      Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End
+      ) {
+        TextButton(onClick = onDismiss) {
+          Text("Cancelar")
+        }
+        Spacer(modifier = Modifier.width(8.dp))
+        Button(
+          onClick = {
+            if (isValid) {
+              onSave(title, body)
+              onDismiss()
+            }
+          },
+          enabled = isValid
+        ) {
+          Text("Guardar")
+        }
+      }
+    }
+  }
+}
+
 @Composable
 fun MovieDetailScreenV2(
   movieId: Int,
@@ -84,6 +161,7 @@ fun MovieDetailScreenV2(
 
   val snackbarHostState = remember { SnackbarHostState() }
   val scope = rememberCoroutineScope()
+  var showCommentSheet by rememberSaveable { mutableStateOf(false) }
 
   LaunchedEffect(movieId) {
     viewModel.loadMovieById(movieId)
@@ -122,9 +200,9 @@ fun MovieDetailScreenV2(
     movie?.let {
       Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(padding)
-            .verticalScroll(rememberScrollState())
+          .fillMaxSize()
+          .padding(padding)
+          .verticalScroll(rememberScrollState())
       ) {
         HeroHeader(movie = it)
         Spacer(modifier = Modifier.height(16.dp))
@@ -137,8 +215,26 @@ fun MovieDetailScreenV2(
         SectionDivider()
         Spacer(modifier = Modifier.height(20.dp))
         SynopsisSection(overview = it.overview)
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+          onClick = { showCommentSheet = true },
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+        ) {
+          Text("Dejar un comentario")
+        }
         Spacer(modifier = Modifier.height(24.dp))
       }
+    }
+
+    if (showCommentSheet) {
+      CommentBottomSheet(
+        onSave = { title, body ->
+          // viewModel.createPost(title, body)
+        },
+        onDismiss = { showCommentSheet = false }
+      )
     }
   }
 }
@@ -150,29 +246,29 @@ private fun HeroHeader(movie: Movie) {
       model = movie.backdropUrl,
       contentDescription = movie.title,
       modifier = Modifier
-          .fillMaxWidth()
-          .height(260.dp),
+        .fillMaxWidth()
+        .height(260.dp),
       contentScale = ContentScale.Crop
     )
     Box(
       modifier = Modifier
-          .fillMaxWidth()
-          .height(260.dp)
-          .background(
-              Brush.verticalGradient(
-                  colorStops = arrayOf(
-                      0.0f to Color.Black.copy(alpha = 0.35f),
-                      0.35f to Color.Transparent,
-                      1.0f to Color.Black.copy(alpha = 0.9f)
-                  )
-              )
+        .fillMaxWidth()
+        .height(260.dp)
+        .background(
+          Brush.verticalGradient(
+            colorStops = arrayOf(
+              0.0f to Color.Black.copy(alpha = 0.35f),
+              0.35f to Color.Transparent,
+              1.0f to Color.Black.copy(alpha = 0.9f)
+            )
           )
+        )
     )
     Row(
       modifier = Modifier
-          .fillMaxWidth()
-          .align(Alignment.BottomStart)
-          .padding(16.dp),
+        .fillMaxWidth()
+        .align(Alignment.BottomStart)
+        .padding(16.dp),
       verticalAlignment = Alignment.Bottom
     ) {
       ElevatedCard(
@@ -214,9 +310,9 @@ private fun RatingBadge(rating: Double, votes: Int) {
   Row(
     verticalAlignment = Alignment.CenterVertically,
     modifier = Modifier
-        .clip(RoundedCornerShape(50))
-        .background(Color.Black.copy(alpha = 0.55f))
-        .padding(horizontal = 10.dp, vertical = 6.dp)
+      .clip(RoundedCornerShape(50))
+      .background(Color.Black.copy(alpha = 0.55f))
+      .padding(horizontal = 10.dp, vertical = 6.dp)
   ) {
     Icon(
       imageVector = Icons.Filled.Star,
@@ -243,8 +339,8 @@ private fun RatingBadge(rating: Double, votes: Int) {
 private fun StatsRow(movie: Movie) {
   Row(
     modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp),
+      .fillMaxWidth()
+      .padding(horizontal = 16.dp),
     horizontalArrangement = Arrangement.spacedBy(10.dp)
   ) {
     StatTile(
@@ -284,8 +380,8 @@ private fun StatTile(
   ) {
     Column(
       modifier = Modifier
-          .fillMaxWidth()
-          .padding(vertical = 12.dp, horizontal = 8.dp),
+        .fillMaxWidth()
+        .padding(vertical = 12.dp, horizontal = 8.dp),
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
       Icon(
@@ -346,21 +442,21 @@ private fun formatPopularity(value: Double): String = when {
 private fun GenrePill(name: String) {
   Box(
     modifier = Modifier
-        .clip(RoundedCornerShape(50))
-        .background(
-            Brush.horizontalGradient(
-                colors = listOf(
-                    MaterialTheme.colorScheme.primary.copy(alpha = 0.18f),
-                    MaterialTheme.colorScheme.tertiary.copy(alpha = 0.18f)
-                )
-            )
+      .clip(RoundedCornerShape(50))
+      .background(
+        Brush.horizontalGradient(
+          colors = listOf(
+            MaterialTheme.colorScheme.primary.copy(alpha = 0.18f),
+            MaterialTheme.colorScheme.tertiary.copy(alpha = 0.18f)
+          )
         )
-        .border(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f),
-            shape = RoundedCornerShape(50)
-        )
-        .padding(horizontal = 14.dp, vertical = 8.dp)
+      )
+      .border(
+        width = 1.dp,
+        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f),
+        shape = RoundedCornerShape(50)
+      )
+      .padding(horizontal = 14.dp, vertical = 8.dp)
   ) {
     Text(
       text = name,
@@ -376,8 +472,8 @@ private fun GenrePill(name: String) {
 private fun GenresRow(genreIds: List<Int>) {
   FlowRow(
     modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp),
+      .fillMaxWidth()
+      .padding(horizontal = 16.dp),
     horizontalArrangement = Arrangement.spacedBy(8.dp),
     verticalArrangement = Arrangement.spacedBy(8.dp)
   ) {
